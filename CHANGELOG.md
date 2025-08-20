@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2025-01-27
+
+### Added
+- **Community Templates**: Added GitHub issue templates for bug reports and feature requests
+- **Pull Request Template**: Added comprehensive PR template with testing checklist and platform verification
+- **Issue Template Configuration**: Added config file to guide users to appropriate channels for questions and discussions
+
+### Community Improvements
+- Enhanced project contribution workflow with standardized templates
+- Improved issue reporting with structured bug report and feature request forms
+- Streamlined pull request process with comprehensive checklists
+- Better guidance for community members seeking help or documentation
+
 ## [1.0.2] - 2025-08-20
 
 ### Fixed
@@ -80,7 +93,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/6639835/xplane-plugin-example/releases/tag/v1.0.0
