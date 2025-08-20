@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2025-08-20
+
+### Fixed
+- **Critical Bug**: Fixed swapped endianness macros (SWAP_16/SWAP_32) that caused audio corruption on big-endian systems
+- **Security**: Replaced unsafe `strcpy()` calls with `strncpy()` to prevent buffer overflow vulnerabilities
+- **Security**: Replaced unsafe `strcat()` call with `strncat()` with proper bounds checking
+- **Format Strings**: Fixed printf format string mismatches for pointer arguments
+- **Code Quality**: Improved memory safety and reduced compiler warnings from 39 to 37
+
+### Changed
+- Enhanced string handling with proper bounds checking throughout the codebase
+- Improved cross-platform compatibility with correct endianness handling
+- Updated pointer formatting to use proper `%p` format specifiers
+
+### Technical Improvements
+- Eliminated buffer overflow security vulnerabilities in plugin initialization
+- Fixed audio data corruption issues on big-endian architectures
+- Enhanced code safety without affecting functionality or performance
+- Maintained full backward compatibility with existing X-Plane installations
+
 ## [1.0.1] - 2025-08-20
 
 ### Fixed
@@ -60,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/6639835/xplane-plugin-example/releases/tag/v1.0.0

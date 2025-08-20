@@ -34,11 +34,11 @@
 
 // Macros to swap endian-values.
 
-#define SWAP_32(value)                 \
+#define SWAP_16(value)                 \
         (((((unsigned short)value)<<8) & 0xFF00)   | \
          ((((unsigned short)value)>>8) & 0x00FF))
 
-#define SWAP_16(value)                     \
+#define SWAP_32(value)                     \
         (((((unsigned int)value)<<24) & 0xFF000000)  | \
          ((((unsigned int)value)<< 8) & 0x00FF0000)  | \
          ((((unsigned int)value)>> 8) & 0x0000FF00)  | \
@@ -290,7 +290,7 @@ static float init_sound(float elapsed, float elapsed_sim, int counter, void * re
 		// Make our context current, so that OpenAL commands affect our, um, stuff.
 		
 		alcMakeContextCurrent(my_ctx);
-		printf("0x%08x: I created the context.\n",XPLMGetMyID(), my_ctx);
+		printf("0x%08x: I created the context %p.\n",XPLMGetMyID(), (void*)my_ctx);
 
 		ALCint		major_version, minor_version;
 		const char * al_hw=alcGetString(my_dev,ALC_DEVICE_SPECIFIER	);
@@ -307,7 +307,7 @@ static float init_sound(float elapsed, float elapsed_sim, int counter, void * re
 	} 
 	else
 	{
-		printf("0x%08x: I found someone else's context 0x%08x.\n",XPLMGetMyID(), old_ctx);
+		printf("0x%08x: I found someone else's context %p.\n",XPLMGetMyID(), (void*)old_ctx);
 	}
 	
 	ALfloat	zero[3] = { 0 } ;
@@ -323,7 +323,7 @@ static float init_sound(float elapsed, float elapsed_sim, int counter, void * re
 	}
 	++slash;
 	*slash=0;
-	strcat(buf,"sound.wav");
+	strncat(buf, "sound.wav", sizeof(buf) - strlen(buf) - 1);
 	#if APL
 		ConvertPath(buf,buf,sizeof(buf));
 	#endif
@@ -350,9 +350,12 @@ static float init_sound(float elapsed, float elapsed_sim, int counter, void * re
 
 PLUGIN_API int XPluginStart(char * name, char * sig, char * desc)
 {
-	strcpy(name,"OpenAL Sound Demo");
-	strcpy(sig,"xpsdk.demo.openal2");
-	strcpy(desc,"Demonstrates sound playback with OpenAL.");
+	strncpy(name, "OpenAL Sound Demo", 255);
+	name[255] = '\0';
+	strncpy(sig, "xpsdk.demo.openal2", 255);
+	sig[255] = '\0';
+	strncpy(desc, "Demonstrates sound playback with OpenAL.", 255);
+	desc[255] = '\0';
 	
 	if( sizeof(unsigned int) != 4 ||
 		sizeof(unsigned short) != 2)
@@ -380,7 +383,7 @@ PLUGIN_API void XPluginStop(void)
 	}
 	if(my_ctx) 
 	{
-		printf("0x%08x: deleting my context 0x%08x\n", XPLMGetMyID(),my_ctx);
+		printf("0x%08x: deleting my context %p\n", XPLMGetMyID(), (void*)my_ctx);
 		alcMakeContextCurrent(NULL);
 		alcDestroyContext(my_ctx);
 	}
