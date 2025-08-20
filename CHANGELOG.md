@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-08-20
+
+### Fixed
+- **Windows Build Issue**: Completely resolved Windows compilation problems with OpenAL headers
+- **OpenAL SDK Integration**: Fixed Windows GitHub Actions workflow to automatically download and configure OpenAL-Soft SDK
+- **Header Include Paths**: Corrected OpenAL header includes for Windows (`AL/al.h`) vs macOS (`OpenAL/al.h`)
+- **CMake Configuration**: Enhanced Windows CMake configuration with comprehensive OpenAL detection and linking
+- **CI/CD Pipeline**: Improved GitHub Actions workflow with robust OpenAL installation and verification steps
+
+### Changed
+- Updated Windows build process to use OpenAL-Soft SDK instead of system OpenAL
+- Enhanced CMake error reporting with clear success/failure messages for OpenAL detection
+- Improved GitHub Actions workflow with detailed OpenAL setup logging and verification
+
+### Technical Improvements
+- Added automatic OpenAL-Soft SDK download in GitHub Actions for Windows builds
+- Implemented comprehensive OpenAL path searching in CMake for Windows
+- Added environment variable support (`OPENAL_ROOT`) for flexible OpenAL SDK location
+- Enhanced build verification with detailed OpenAL file structure logging
+
 ## [1.0.0] - 2025-08-20
 
 ### Added
@@ -40,5 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/6639835/xplane-plugin-example/releases/tag/v1.0.0
