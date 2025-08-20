@@ -15,12 +15,12 @@
 #endif
 
 // Your include paths for OpenAL may vary by platform.
-#if APL
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
+#if LIN
 #include <AL/al.h>
 #include <AL/alc.h>
+#else
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #endif
 
 /**************************************************************************************************************
