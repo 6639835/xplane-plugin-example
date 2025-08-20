@@ -97,15 +97,84 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-        choco install openal
+        
+        # Download and setup OpenAL SDK directly
+        Write-Host "Downloading OpenAL SDK..."
+        $openalUrl = "https://www.openal.org/downloads/oalinst.zip"
+        $openalZip = "$env:TEMP\openal.zip"
+        $openalDir = "C:\OpenAL"
+        
+        # Create OpenAL directory
+        New-Item -ItemType Directory -Force -Path $openalDir
+        
+        # Download OpenAL installer
+        Invoke-WebRequest -Uri $openalUrl -OutFile $openalZip
+        
+        # Extract OpenAL
+        Expand-Archive -Path $openalZip -DestinationPath "$openalDir\temp" -Force
+        
+        # Find and run the installer silently
+        $installer = Get-ChildItem -Path "$openalDir\temp" -Filter "*.exe" | Select-Object -First 1
+        if ($installer) {
+            Write-Host "Installing OpenAL: $($installer.FullName)"
+            Start-Process -FilePath $installer.FullName -ArgumentList "/S" -Wait -NoNewWindow
+        }
+        
+        # Also download OpenAL SDK for headers and libs
+        Write-Host "Downloading OpenAL SDK for development..."
+        $sdkUrl = "https://github.com/kcat/openal-soft/releases/download/1.23.1/openal-soft-1.23.1-bin.zip"
+        $sdkZip = "$env:TEMP\openal-sdk.zip"
+        $sdkDir = "C:\OpenAL-SDK"
+        
+        Invoke-WebRequest -Uri $sdkUrl -OutFile $sdkZip
+        Expand-Archive -Path $sdkZip -DestinationPath $sdkDir -Force
+        
+        # Set environment variable for CMake to find OpenAL
+        $openalRoot = Get-ChildItem -Path $sdkDir -Directory | Select-Object -First 1
+        if ($openalRoot) {
+            Write-Host "Setting OPENAL_ROOT to: $($openalRoot.FullName)"
+            echo "OPENAL_ROOT=$($openalRoot.FullName)" >> $env:GITHUB_ENV
+            
+            # Also set for current session
+            $env:OPENAL_ROOT = $openalRoot.FullName
+            
+            # List contents to verify structure
+            Write-Host "OpenAL SDK contents:"
+            Get-ChildItem -Path $openalRoot.FullName -Recurse -Directory | ForEach-Object { Write-Host "  $($_.FullName)" }
+        }
+        
+        Write-Host "OpenAL setup complete!"
       shell: pwsh
     
-    - name: Verify CMake installation (Windows)
+    - name: Verify CMake and OpenAL installation (Windows)
       if: runner.os == 'Windows'
       run: |
         # Restart PowerShell session to ensure environment variables take effect
         $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "User")
+        
+        Write-Host "=== CMake Version ==="
         cmake --version
+        
+        Write-Host "=== OpenAL Environment ==="
+        Write-Host "OPENAL_ROOT: $env:OPENAL_ROOT"
+        
+        if ($env:OPENAL_ROOT -and (Test-Path $env:OPENAL_ROOT)) {
+            Write-Host "OpenAL SDK structure:"
+            Get-ChildItem -Path $env:OPENAL_ROOT -Recurse | Where-Object { $_.Name -match "\.(h|lib|dll)$" } | ForEach-Object {
+                Write-Host "  $($_.FullName)"
+            }
+        } else {
+            Write-Host "OpenAL SDK not found at OPENAL_ROOT"
+        }
+        
+        Write-Host "=== System OpenAL Check ==="
+        $systemOpenAL = Get-ChildItem -Path "C:\Windows\System32" -Filter "*openal*" -ErrorAction SilentlyContinue
+        if ($systemOpenAL) {
+            Write-Host "System OpenAL files:"
+            $systemOpenAL | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "No system OpenAL files found"
+        }
       shell: pwsh
     
     - name: Install dependencies (macOS)

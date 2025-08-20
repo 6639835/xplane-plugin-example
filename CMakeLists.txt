@@ -91,12 +91,62 @@ elseif(WIN32)
     add_definitions(-DAPL=0 -DIBM=1 -DLIN=0)
     add_definitions(-DXPLM200=1 -DXPLM300=1 -DXPLM400=1 -DXPLM410=1)  # Support X-Plane SDK versions
     
+    # Find OpenAL - comprehensive search for Windows
+    set(OPENAL_FOUND FALSE)
+    
+    # Search paths for OpenAL
+    set(OPENAL_SEARCH_PATHS
+        "$ENV{OPENAL_ROOT}"
+        "C:/OpenAL-SDK/openal-soft-1.23.1-bin"
+        "C:/Program Files/OpenAL 1.1 SDK"
+        "C:/Program Files (x86)/OpenAL 1.1 SDK"
+        "C:/OpenAL"
+    )
+    
+    # Find include directory
+    find_path(OPENAL_INCLUDE_DIR
+        NAMES AL/al.h OpenAL/al.h
+        PATHS ${OPENAL_SEARCH_PATHS}
+        PATH_SUFFIXES include
+        NO_DEFAULT_PATH
+    )
+    
+    # Find library
+    find_library(OPENAL_LIBRARY
+        NAMES OpenAL32 openal32 OpenAL
+        PATHS ${OPENAL_SEARCH_PATHS}
+        PATH_SUFFIXES 
+            lib
+            libs
+            libs/Win64
+            libs/Win32
+            lib/Win64
+            lib/Win32
+        NO_DEFAULT_PATH
+    )
+    
+    # Check if we found both
+    if(OPENAL_INCLUDE_DIR AND OPENAL_LIBRARY)
+        set(OPENAL_FOUND TRUE)
+        set(OPENAL_INCLUDE_DIRS ${OPENAL_INCLUDE_DIR})
+        set(OPENAL_LIBRARIES ${OPENAL_LIBRARY})
+        message(STATUS "✓ Found OpenAL include: ${OPENAL_INCLUDE_DIR}")
+        message(STATUS "✓ Found OpenAL library: ${OPENAL_LIBRARY}")
+    else()
+        message(STATUS "✗ OpenAL include dir: ${OPENAL_INCLUDE_DIR}")
+        message(STATUS "✗ OpenAL library: ${OPENAL_LIBRARY}")
+        message(FATAL_ERROR "OpenAL not found! Please ensure OpenAL SDK is installed.")
+    endif()
+
     # Header file include paths
     include_directories(
         "${XPLM_SDK_PATH}/CHeaders/XPLM"
         "${XPLM_SDK_PATH}/CHeaders/Widgets"
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
     )
+    
+    # Add OpenAL include directory
+    include_directories(${OPENAL_INCLUDE_DIRS})
     
     # Source files
     set(SOURCES
@@ -120,8 +170,10 @@ elseif(WIN32)
     target_link_libraries(${PROJECT_NAME}
         "${XPLM_SDK_PATH}/Libraries/Win/XPLM_64.lib"
         "${XPLM_SDK_PATH}/Libraries/Win/XPWidgets_64.lib"
-        openal32
     )
+    
+    # Link OpenAL
+    target_link_libraries(${PROJECT_NAME} ${OPENAL_LIBRARIES})
     
     # Use Windows symbol export file
     set_target_properties(${PROJECT_NAME} PROPERTIES
