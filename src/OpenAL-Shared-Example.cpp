@@ -15,8 +15,13 @@
 #endif
 
 // Your include paths for OpenAL may vary by platform.
+#if APL
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
+#endif
 
 /**************************************************************************************************************
  * WAVE FILE LOADING
