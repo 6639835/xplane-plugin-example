@@ -1,208 +1,181 @@
-# OpenAL Shared Example Plugin - Static Website
+# OpenAL Shared Example Plugin Website
 
-This directory contains a modern, responsive static website for the OpenAL Shared Example Plugin. The website showcases the plugin features, provides download links for releases, and displays the changelog.
+A modern, Notion-inspired website for the OpenAL Shared Example Plugin - a cross-platform X-Plane plugin demonstrating OpenAL sound playback functionality.
 
-## Features
+## 🎨 Design Features
 
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **Dynamic Content**: Automatically fetches releases from GitHub API
-- **Changelog Display**: Parses and displays the CHANGELOG.md file
-- **Modern UI**: Clean, professional design with smooth animations
-- **Cross-Platform Downloads**: Separate download buttons for Windows, macOS, and Linux
-- **Mobile Navigation**: Hamburger menu for mobile devices
-- **Smooth Scrolling**: Enhanced navigation experience
+### Notion-Style Aesthetic
+- **Clean Typography**: Uses system fonts with excellent readability
+- **Minimal Color Palette**: Subtle grays and blues inspired by Notion's design
+- **Subtle Shadows**: Soft, layered shadows for depth without being overwhelming
+- **Document-Like Layout**: Clean, structured content presentation
+- **Consistent Spacing**: Systematic spacing using CSS custom properties
 
-## Files
+### Color Scheme
+- **Primary Text**: `#37352f` (Notion's primary text color)
+- **Secondary Text**: `#787774` (Notion's secondary text color)
+- **Accent Color**: `#2e75cc` (Notion's blue accent)
+- **Backgrounds**: Clean whites and subtle grays
+- **Borders**: Soft, barely-there borders for structure
 
-- `index.html` - Main HTML structure
-- `styles.css` - CSS styles and responsive design
-- `script.js` - JavaScript functionality for dynamic content
-- `README.md` - This documentation file
+### Typography
+- **Font Family**: System fonts (`-apple-system, BlinkMacSystemFont, 'Segoe UI'`)
+- **Font Weights**: 300, 400, 500, 600, 700
+- **Monospace**: `SF Mono, Monaco, 'Cascadia Code'` for code blocks
+- **Line Heights**: Optimized for readability (1.6 for body, 1.3 for headings)
 
-## Local Development
+## 🚀 Features
 
-To run the website locally:
+### Interactive Elements
+- **Smooth Animations**: Subtle fade-in animations on scroll
+- **Hover Effects**: Gentle lift effects on cards and buttons
+- **Ripple Effects**: Material Design-inspired ripple on button clicks
+- **Copy to Clipboard**: Click any code block to copy its content
+- **Toast Notifications**: Feedback for user actions
 
-1. **Simple HTTP Server** (Python):
-   ```bash
-   cd website
-   python -m http.server 8000
-   ```
-   Then open http://localhost:8000
+### Navigation
+- **Sticky Header**: Fixed navigation with backdrop blur
+- **Active State Tracking**: Highlights current section in navigation
+- **Smooth Scrolling**: Smooth transitions between sections
+- **Mobile Responsive**: Collapsible mobile menu
 
-2. **Node.js HTTP Server**:
-   ```bash
-   cd website
-   npx http-server -p 8000
-   ```
+### Content Sections
+- **Hero Section**: Clean introduction with call-to-action buttons
+- **Features Grid**: Card-based feature presentation
+- **Downloads**: Dynamic download cards with file sizes
+- **Installation Guide**: Step-by-step numbered instructions
+- **Changelog**: Parsed from GitHub markdown
 
-3. **Live Server** (VS Code Extension):
-   - Install the "Live Server" extension
-   - Right-click on `index.html` and select "Open with Live Server"
+### Performance
+- **Intersection Observer**: Efficient scroll-based animations
+- **Resource Preloading**: Critical fonts and icons preloaded
+- **Lazy Loading**: Content loads as needed
+- **Optimized Animations**: Hardware-accelerated CSS transitions
 
-## Deployment Options
+## 🛠 Technical Implementation
 
-### GitHub Pages
+### CSS Architecture
+- **CSS Custom Properties**: Consistent theming and spacing
+- **BEM-like Naming**: Semantic class names
+- **Mobile-First**: Responsive design from mobile up
+- **Accessibility**: Focus states, keyboard navigation, screen reader support
 
-1. **Enable GitHub Pages**:
-   - Go to your repository settings
-   - Scroll to "Pages" section
-   - Select source: "Deploy from a branch"
-   - Choose branch: `main` and folder: `/website`
+### JavaScript Features
+- **Modular Functions**: Well-organized, reusable code
+- **Error Handling**: Graceful fallbacks for API failures
+- **Event Delegation**: Efficient event handling
+- **Progressive Enhancement**: Works without JavaScript
 
-2. **Custom Domain** (optional):
-   - Add a `CNAME` file with your domain name
-   - Configure DNS settings
+### API Integration
+- **GitHub Releases API**: Dynamic download links and file sizes
+- **Markdown Parsing**: Automatic changelog rendering
+- **Error States**: User-friendly error messages
 
-### Netlify
+## 📱 Responsive Design
 
-1. **Drag and Drop**:
-   - Go to [netlify.com](https://netlify.com)
-   - Drag the `website` folder to the deploy area
+### Breakpoints
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
 
-2. **Git Integration**:
-   - Connect your GitHub repository
-   - Set build directory to `website`
-   - Deploy automatically on commits
+### Mobile Optimizations
+- **Touch-Friendly**: Large touch targets
+- **Simplified Navigation**: Hamburger menu
+- **Optimized Typography**: Readable font sizes
+- **Efficient Layout**: Single-column layouts where appropriate
 
-### Vercel
+## 🎯 User Experience
 
-1. **Import Project**:
-   - Go to [vercel.com](https://vercel.com)
-   - Import your GitHub repository
-   - Set output directory to `website`
+### Accessibility
+- **Keyboard Navigation**: Full keyboard support
+- **Focus Indicators**: Clear focus states
+- **Screen Reader Support**: Semantic HTML structure
+- **Color Contrast**: WCAG AA compliant
 
-### Traditional Web Hosting
+### Performance
+- **Fast Loading**: Optimized assets and code
+- **Smooth Interactions**: 60fps animations
+- **Progressive Loading**: Content appears as needed
+- **Caching**: Efficient resource caching
 
-Upload all files in the `website` directory to your web server's public folder.
+## 🔧 Customization
 
-## Configuration
-
-### GitHub Repository
-
-Update the repository information in `script.js`:
-
-```javascript
-const GITHUB_REPO = '6639835/xplane-plugin-example';
-```
-
-Change this to match your GitHub username and repository name.
-
-### Customization
-
-#### Colors and Branding
-
-Edit the CSS custom properties in `styles.css`:
-
+### Colors
+All colors are defined as CSS custom properties in `:root`:
 ```css
 :root {
-    --primary-color: #2563eb;
-    --primary-dark: #1d4ed8;
-    /* ... other colors */
+    --primary-color: #37352f;
+    --accent-color: #2e75cc;
+    --bg-primary: #ffffff;
+    /* ... more variables */
 }
 ```
 
-#### Content
-
-- Update the hero section text in `index.html`
-- Modify feature descriptions
-- Change footer links and information
-
-#### GitHub Links
-
-Update all GitHub links throughout the HTML to point to your repository.
-
-## API Usage
-
-The website uses the GitHub API to fetch release information:
-
-- **Endpoint**: `https://api.github.com/repos/{owner}/{repo}/releases`
-- **Rate Limit**: 60 requests per hour for unauthenticated requests
-- **Caching**: Consider implementing caching for production use
-
-## Browser Support
-
-- **Modern Browsers**: Chrome 60+, Firefox 60+, Safari 12+, Edge 79+
-- **Mobile**: iOS Safari 12+, Chrome Mobile 60+
-- **Features Used**: CSS Grid, Flexbox, Fetch API, Intersection Observer
-
-## Performance
-
-- **Lighthouse Score**: 95+ on all metrics
-- **Loading**: Critical CSS inlined, fonts preloaded
-- **Images**: Optimized SVG icons, no heavy images
-- **JavaScript**: Minimal, progressive enhancement
-
-## SEO Features
-
-- Semantic HTML structure
-- Meta descriptions and titles
-- Open Graph tags (can be added)
-- Structured data (can be added)
-- Fast loading times
-
-## Accessibility
-
-- WCAG 2.1 AA compliant
-- Keyboard navigation support
-- Screen reader friendly
-- High contrast ratios
-- Focus indicators
-
-## Maintenance
-
-### Regular Updates
-
-1. **Dependencies**: Update Font Awesome and Google Fonts URLs as needed
-2. **Content**: Keep feature descriptions and links current
-3. **Styling**: Refresh design elements periodically
-
-### Monitoring
-
-- Check GitHub API rate limits
-- Monitor website performance
-- Test on different devices and browsers
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Releases Not Loading**:
-   - Check GitHub repository name in `script.js`
-   - Verify repository is public
-   - Check browser console for API errors
-
-2. **Changelog Not Displaying**:
-   - Ensure `CHANGELOG.md` exists in repository root
-   - Check file format matches expected structure
-   - Verify raw GitHub URL is accessible
-
-3. **Styling Issues**:
-   - Clear browser cache
-   - Check CSS file is loading correctly
-   - Verify font and icon CDN links
-
-### Debug Mode
-
-Add this to `script.js` for debugging:
-
-```javascript
-// Enable debug logging
-const DEBUG = true;
-if (DEBUG) {
-    console.log('Debug mode enabled');
+### Spacing
+Consistent spacing system:
+```css
+:root {
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
 }
 ```
 
-## Contributing
+### Typography
+Typography scale and weights:
+```css
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+```
 
-To contribute to the website:
+## 📄 File Structure
 
-1. Fork the repository
-2. Make changes to files in the `website` directory
-3. Test locally using a local server
-4. Submit a pull request
+```
+website/
+├── index.html          # Main HTML structure
+├── styles.css          # Notion-style CSS
+├── script.js           # Interactive functionality
+├── README.md           # This documentation
+└── deploy.sh           # Deployment script
+```
 
-## License
+## 🚀 Deployment
 
-This website code is part of the OpenAL Shared Example Plugin project and follows the same license terms.
+The website can be deployed to any static hosting service:
+
+1. **GitHub Pages**: Push to `gh-pages` branch
+2. **Netlify**: Drag and drop the website folder
+3. **Vercel**: Connect GitHub repository
+4. **AWS S3**: Upload files to S3 bucket
+
+## 🔄 Updates
+
+### Recent Changes
+- **Notion-Style Redesign**: Complete visual overhaul
+- **Improved Typography**: Better readability and hierarchy
+- **Enhanced Interactions**: Smooth animations and feedback
+- **Better Mobile Experience**: Optimized for all devices
+- **Accessibility Improvements**: Better keyboard and screen reader support
+
+### Future Enhancements
+- **Dark Mode**: Toggle between light and dark themes
+- **Search Functionality**: Search through documentation
+- **Interactive Examples**: Live code examples
+- **Analytics**: User behavior tracking
+- **PWA Features**: Offline support and app-like experience
+
+## 📞 Support
+
+For issues or questions about the website:
+- **GitHub Issues**: [Create an issue](https://github.com/6639835/xplane-plugin-example/issues)
+- **Discussions**: [Join the discussion](https://github.com/6639835/xplane-plugin-example/discussions)
+
+---
+
+*This website is designed to provide a clean, professional presentation of the OpenAL Shared Example Plugin, following modern web design principles and Notion's aesthetic approach.*

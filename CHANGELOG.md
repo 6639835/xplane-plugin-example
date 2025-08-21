@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2025-08-21
+
+### Added
+- **Notion-Style Website Redesign**: Complete visual overhaul with modern Notion-inspired design
+- **Full-Screen Background Image**: Added X-Plane screenshot as hero background with parallax effect
+- **Glass Morphism UI**: Modern glass-like buttons and cards with backdrop blur effects
+- **Enhanced Animations**: Smooth fade-in animations and hover effects throughout the website
+- **Improved Typography**: Better font hierarchy and readability with system fonts
+- **Mobile Optimization**: Enhanced responsive design with better touch interactions
+
+### Website Improvements
+- **Visual Design**: Clean, minimal aesthetic inspired by Notion's design language
+- **Color Palette**: Updated to Notion's signature colors (grays and blues)
+- **Interactive Elements**: Ripple effects on buttons and enhanced hover states
+- **Performance**: Optimized animations and effects for smooth 60fps experience
+- **Accessibility**: Improved keyboard navigation and screen reader support
+
+### Technical Enhancements
+- **CSS Architecture**: Better organization with CSS custom properties
+- **JavaScript Improvements**: Enhanced error handling and user interactions
+- **Responsive Design**: Mobile-first approach with better breakpoints
+- **Progressive Enhancement**: Works without JavaScript for basic functionality
+
 ## [1.0.4] - 2025-08-21
 
 ### Added
@@ -123,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...v1.0.2

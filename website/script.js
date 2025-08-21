@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (targetSection) {
                 const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
                 
                 window.scrollTo({
                     top: targetPosition,
@@ -37,29 +37,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Active navigation link highlighting
-    window.addEventListener('scroll', function() {
-        const sections = document.querySelectorAll('section');
-        const scrollPos = window.scrollY + 100;
+    // Active navigation link highlighting with intersection observer
+    const sections = document.querySelectorAll('section[id]');
+    const navLinksArray = Array.from(navLinks);
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            const correspondingLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                navLinks.forEach(link => link.classList.remove('active'));
-                if (correspondingLink) {
-                    correspondingLink.classList.add('active');
-                }
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const currentId = entry.target.getAttribute('id');
+                navLinksArray.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentId}`) {
+                        link.classList.add('active');
+                    }
+                });
             }
         });
+    }, {
+        threshold: 0.3,
+        rootMargin: '-100px 0px -100px 0px'
+    });
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
     });
 
     // Load releases and changelog
     loadReleases();
     loadChangelog();
+    
+    // Initialize animations
+    initializeAnimations();
+    
+    // Initialize interactive elements
+    initializeInteractiveElements();
 });
 
 // GitHub API Configuration
@@ -106,6 +117,9 @@ function displayLatestRelease(release) {
     // Create download cards
     const downloadCards = createDownloadCards(release);
     downloadGrid.innerHTML = downloadCards;
+    
+    // Add click animations to new download buttons
+    addDownloadButtonAnimations();
 }
 
 // Create download cards for different platforms
@@ -180,9 +194,9 @@ function createDownloadCards(release) {
 function displayNoReleases() {
     const downloadGrid = document.getElementById('download-grid');
     downloadGrid.innerHTML = `
-        <div class="no-releases">
-            <p>No releases available yet. Check back soon!</p>
-            <a href="https://github.com/${GITHUB_REPO}/actions" class="btn btn-outline" target="_blank">
+        <div class="no-releases" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">No releases available yet. Check back soon!</p>
+            <a href="https://github.com/${GITHUB_REPO}/actions" class="btn btn-outline" target="_blank" rel="noopener">
                 <i class="fas fa-cog"></i>
                 View Development Builds
             </a>
@@ -194,9 +208,9 @@ function displayNoReleases() {
 function displayReleaseError() {
     const downloadGrid = document.getElementById('download-grid');
     downloadGrid.innerHTML = `
-        <div class="release-error">
-            <p>Unable to load releases. Please try again later.</p>
-            <a href="https://github.com/${GITHUB_REPO}/releases" class="btn btn-outline" target="_blank">
+        <div class="release-error" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to load releases. Please try again later.</p>
+            <a href="https://github.com/${GITHUB_REPO}/releases" class="btn btn-outline" target="_blank" rel="noopener">
                 <i class="fab fa-github"></i>
                 View on GitHub
             </a>
@@ -274,7 +288,7 @@ function displayChangelog(entries) {
     
     if (entries.length === 0) {
         changelogContent.innerHTML = `
-            <div class="no-changelog">
+            <div class="no-changelog" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
                 <p>No changelog entries found.</p>
             </div>
         `;
@@ -294,7 +308,7 @@ function displayChangelog(entries) {
             `).join('');
 
         return `
-            <div class="changelog-entry fade-in-up">
+            <div class="changelog-entry">
                 <div class="changelog-version">
                     <h3>Version ${entry.version}</h3>
                     <span class="changelog-date">${entry.date}</span>
@@ -311,14 +325,141 @@ function displayChangelog(entries) {
 function displayChangelogError() {
     const changelogContent = document.getElementById('changelog-content');
     changelogContent.innerHTML = `
-        <div class="changelog-error">
-            <p>Unable to load changelog. Please try again later.</p>
-            <a href="https://github.com/${GITHUB_REPO}/blob/main/CHANGELOG.md" class="btn btn-outline" target="_blank">
+        <div class="changelog-error" style="text-align: center; padding: 2rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Unable to load changelog. Please try again later.</p>
+            <a href="https://github.com/${GITHUB_REPO}/blob/main/CHANGELOG.md" class="btn btn-outline" target="_blank" rel="noopener">
                 <i class="fab fa-github"></i>
                 View on GitHub
             </a>
         </div>
     `;
+}
+
+// Initialize animations
+function initializeAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-up');
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    const animatedElements = document.querySelectorAll('.feature-card, .download-card, .step, .changelog-entry');
+    animatedElements.forEach(el => observer.observe(el));
+}
+
+// Initialize interactive elements
+function initializeInteractiveElements() {
+    // Add click handlers for code blocks
+    const codeBlocks = document.querySelectorAll('code');
+    codeBlocks.forEach(code => {
+        code.style.cursor = 'pointer';
+        code.title = 'Click to copy';
+        code.addEventListener('click', function() {
+            copyToClipboard(this.textContent);
+        });
+    });
+
+    // Add hover effects to cards
+    const cards = document.querySelectorAll('.feature-card, .download-card, .step');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+}
+
+// Add download button animations
+function addDownloadButtonAnimations() {
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    downloadButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Create ripple effect
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+// Header scroll effect
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.08)';
+    } else {
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.style.boxShadow = 'none';
+    }
+});
+
+// Copy to clipboard functionality
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        showToast('Copied to clipboard!');
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        showToast('Failed to copy to clipboard', 'error');
+    });
+}
+
+// Toast notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (document.body.contains(toast)) {
+                document.body.removeChild(toast);
+            }
+        }, 300);
+    }, 3000);
 }
 
 // Utility functions
@@ -333,96 +474,6 @@ function formatFileSize(bytes) {
 function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-// Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-up');
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.feature-card, .download-card, .step, .changelog-entry');
-    animatedElements.forEach(el => observer.observe(el));
-});
-
-// Header scroll effect
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
-        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.boxShadow = 'none';
-    }
-});
-
-// Copy to clipboard functionality (for installation commands)
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function() {
-        // Show success message
-        showToast('Copied to clipboard!');
-    }).catch(function(err) {
-        console.error('Could not copy text: ', err);
-        showToast('Failed to copy to clipboard', 'error');
-    });
-}
-
-// Toast notification
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#10b981' : '#ef4444'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => {
-        toast.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300);
-    }, 3000);
-}
-
-// Add click handlers for code blocks (if any)
-document.addEventListener('DOMContentLoaded', function() {
-    const codeBlocks = document.querySelectorAll('code');
-    codeBlocks.forEach(code => {
-        code.style.cursor = 'pointer';
-        code.title = 'Click to copy';
-        code.addEventListener('click', function() {
-            copyToClipboard(this.textContent);
-        });
-    });
-});
 
 // Preload critical resources
 function preloadResources() {
@@ -440,5 +491,46 @@ function preloadResources() {
     });
 }
 
+// Add CSS for ripple animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
 // Initialize preloading
 preloadResources();
+
+// Add keyboard navigation support
+document.addEventListener('keydown', function(e) {
+    // Escape key to close mobile menu
+    if (e.key === 'Escape') {
+        const navMenu = document.querySelector('.nav-menu');
+        const navToggle = document.querySelector('.nav-toggle');
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+        }
+    }
+});
+
+// Add loading states for better UX
+function showLoadingState(element) {
+    element.classList.add('loading');
+    element.style.pointerEvents = 'none';
+}
+
+function hideLoadingState(element) {
+    element.classList.remove('loading');
+    element.style.pointerEvents = 'auto';
+}
+
+// Add smooth transitions for theme changes (if implemented later)
+function addThemeTransition() {
+    document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+}
