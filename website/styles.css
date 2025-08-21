@@ -386,8 +386,9 @@ section {
 
 .download-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
+    align-items: stretch;
 }
 
 .download-card {
@@ -398,6 +399,10 @@ section {
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
 }
 
 .download-card:hover {
@@ -408,6 +413,13 @@ section {
 .download-card.loading {
     opacity: 0.6;
     pointer-events: none;
+}
+
+.download-card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .download-icon {
@@ -424,7 +436,17 @@ section {
 
 .download-card p {
     color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.download-card .file-size {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
+}
+
+.download-card-actions {
+    margin-top: auto;
 }
 
 .download-btn {

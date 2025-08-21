@@ -7,7 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.3] - 2025-01-27
+## [1.0.4] - 2025-08-21
+
+### Added
+- **Static Website**: Created a modern, responsive static website for the plugin
+- **GitHub Pages Integration**: Added automatic deployment workflow for the website
+- **Dynamic Release Downloads**: Website automatically fetches and displays latest releases from GitHub
+- **Live Changelog Display**: Website parses and displays the CHANGELOG.md file automatically
+- **Cross-Platform Download Cards**: Separate download buttons for Windows, macOS, Linux, and complete package
+- **Mobile-Responsive Design**: Website works perfectly on desktop, tablet, and mobile devices
+
+### Website Features
+- **Modern UI**: Clean, professional design with smooth animations and modern typography
+- **GitHub API Integration**: Real-time release information and download statistics
+- **Installation Guide**: Step-by-step installation instructions for users
+- **Feature Showcase**: Highlights plugin capabilities and technical details
+- **SEO Optimized**: Semantic HTML structure and meta descriptions
+- **Accessibility**: WCAG 2.1 AA compliant with keyboard navigation support
+
+### Technical Improvements
+- **Automated Deployment**: GitHub Actions workflow for automatic website deployment
+- **Performance Optimized**: Fast loading with minimal dependencies and optimized assets
+- **Error Handling**: Graceful fallbacks when GitHub API is unavailable
+- **Cross-Browser Support**: Compatible with all modern browsers
+- **Progressive Enhancement**: Works without JavaScript for basic functionality
+
+### Documentation
+- **Website Documentation**: Comprehensive README for website deployment and customization
+- **Deployment Scripts**: Automated scripts for various hosting platforms
+- **Development Guide**: Instructions for local development and testing
+
+## [1.0.3] - 2025-08-21
 
 ### Added
 - **Community Templates**: Added GitHub issue templates for bug reports and feature requests
@@ -93,7 +123,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.0...v1.0.1

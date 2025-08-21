@@ -147,28 +147,30 @@ function createDownloadCards(release) {
     return platforms.map(platform => {
         const asset = assets.find(asset => platform.assetPattern.test(asset.name));
         const downloadUrl = asset ? asset.browser_download_url : '#';
-        const downloadCount = asset ? asset.download_count : 0;
         const fileSize = asset ? formatFileSize(asset.size) : '';
         
         return `
             <div class="download-card">
-                <div class="download-icon">
-                    <i class="${platform.icon}"></i>
+                <div class="download-card-content">
+                    <div class="download-icon">
+                        <i class="${platform.icon}"></i>
+                    </div>
+                    <h4>${platform.name}</h4>
+                    <p>${platform.description}</p>
+                    ${fileSize ? `<p class="file-size">${fileSize}</p>` : '<p class="file-size">&nbsp;</p>'}
                 </div>
-                <h4>${platform.name}</h4>
-                <p>${platform.description}</p>
-                ${fileSize ? `<p class="file-size">${fileSize}</p>` : ''}
-                ${asset ? 
-                    `<a href="${downloadUrl}" class="download-btn" download>
-                        <i class="fas fa-download"></i>
-                        Download
-                    </a>
-                    ${downloadCount > 0 ? `<p class="download-count">${downloadCount} downloads</p>` : ''}` :
-                    `<div class="download-btn" style="background: #ccc; cursor: not-allowed;">
-                        <i class="fas fa-times"></i>
-                        Not Available
-                    </div>`
-                }
+                <div class="download-card-actions">
+                    ${asset ? 
+                        `<a href="${downloadUrl}" class="download-btn" download>
+                            <i class="fas fa-download"></i>
+                            Download
+                        </a>` :
+                        `<div class="download-btn" style="background: #ccc; cursor: not-allowed;">
+                            <i class="fas fa-times"></i>
+                            Not Available
+                        </div>`
+                    }
+                </div>
             </div>
         `;
     }).join('');
