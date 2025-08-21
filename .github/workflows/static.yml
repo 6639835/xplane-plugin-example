@@ -9,6 +9,7 @@ on:
       - 'website/**'
       - 'CHANGELOG.md'
       - 'VERSION'
+      - '.github/workflows/static.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -50,15 +51,28 @@ jobs:
           # Add .nojekyll to bypass Jekyll processing
           touch _site/.nojekyll
           
+          # Ensure index.html is in the root of _site
+          if [ ! -f "_site/index.html" ]; then
+            echo "ERROR: index.html not found in website directory!"
+            exit 1
+          fi
+          
           # List files for verification
           echo "Website files prepared:"
           ls -la _site/
+          echo "Index file check:"
+          ls -la _site/index.html
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload website directory
           path: '_site'
+      
+      - name: Verify artifact contents
+        run: |
+          echo "Verifying artifact contents..."
+          # This step helps debug what's being uploaded
       
       - name: Deploy to GitHub Pages
         id: deployment
