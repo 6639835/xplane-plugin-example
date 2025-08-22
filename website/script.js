@@ -236,14 +236,49 @@ async function loadChangelog() {
     }
 }
 
-// Parse changelog markdown
+// Parse changelog markdown with enhanced support
 function parseChangelog(text) {
     const lines = text.split('\n');
     const entries = [];
     let currentEntry = null;
     let currentSection = null;
+    let inCodeBlock = false;
+    let codeBlockContent = [];
+    let codeBlockLanguage = '';
 
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // Handle code blocks
+        const codeBlockMatch = line.match(/^```(\w*)?$/);
+        if (codeBlockMatch) {
+            if (!inCodeBlock) {
+                // Starting code block
+                inCodeBlock = true;
+                codeBlockLanguage = codeBlockMatch[1] || '';
+                codeBlockContent = [];
+            } else {
+                // Ending code block
+                inCodeBlock = false;
+                if (currentEntry && currentSection) {
+                    currentEntry.sections[currentSection].push({
+                        type: 'codeblock',
+                        language: codeBlockLanguage,
+                        content: codeBlockContent.join('\n')
+                    });
+                }
+                codeBlockContent = [];
+                codeBlockLanguage = '';
+            }
+            continue;
+        }
+
+        // If we're in a code block, collect content
+        if (inCodeBlock) {
+            codeBlockContent.push(line);
+            continue;
+        }
+
         // Match version headers like ## [1.0.0] - 2025-01-27
         const versionMatch = line.match(/^##\s*\[([^\]]+)\]\s*-\s*(.+)$/);
         if (versionMatch) {
@@ -268,10 +303,36 @@ function parseChangelog(text) {
             continue;
         }
 
-        // Match list items
-        const listMatch = line.match(/^-\s*(.+)$/);
+        // Match blockquotes
+        const blockquoteMatch = line.match(/^>\s*(.+)$/);
+        if (blockquoteMatch && currentEntry && currentSection) {
+            currentEntry.sections[currentSection].push({
+                type: 'blockquote',
+                content: parseInlineMarkdown(blockquoteMatch[1])
+            });
+            continue;
+        }
+
+        // Match list items (including nested)
+        const listMatch = line.match(/^(\s*)-\s*(.+)$/);
         if (listMatch && currentEntry && currentSection) {
-            currentEntry.sections[currentSection].push(listMatch[1]);
+            const indentLevel = Math.floor(listMatch[1].length / 2); // 2 spaces per indent level
+            const content = parseInlineMarkdown(listMatch[2]);
+            
+            currentEntry.sections[currentSection].push({
+                type: 'listitem',
+                content: content,
+                indent: indentLevel
+            });
+            continue;
+        }
+
+        // Match regular paragraphs (non-empty lines that don't match other patterns)
+        if (line.trim() && currentEntry && currentSection) {
+            currentEntry.sections[currentSection].push({
+                type: 'paragraph',
+                content: parseInlineMarkdown(line.trim())
+            });
         }
     }
 
@@ -280,6 +341,28 @@ function parseChangelog(text) {
     }
 
     return entries;
+}
+
+// Parse inline markdown elements
+function parseInlineMarkdown(text) {
+    // Handle links [text](url)
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    
+    // Handle bold **text** or __text__
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    
+    // Handle italic *text* or _text_ (but not inside words)
+    text = text.replace(/(?<!\w)\*([^*]+)\*(?!\w)/g, '<em>$1</em>');
+    text = text.replace(/(?<!\w)_([^_]+)_(?!\w)/g, '<em>$1</em>');
+    
+    // Handle strikethrough ~~text~~
+    text = text.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+    
+    // Handle inline code `code`
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    return text;
 }
 
 // Display parsed changelog
@@ -301,9 +384,7 @@ function displayChangelog(entries) {
             .map(([sectionName, items]) => `
                 <div class="changelog-section ${sectionName}">
                     <h4>${capitalizeFirst(sectionName)}</h4>
-                    <ul class="changelog-list">
-                        ${items.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
+                    ${renderChangelogItems(items)}
                 </div>
             `).join('');
 
@@ -319,6 +400,80 @@ function displayChangelog(entries) {
     }).join('');
 
     changelogContent.innerHTML = changelogHTML;
+}
+
+// Render different types of changelog items
+function renderChangelogItems(items) {
+    let html = '';
+    let currentList = null;
+    let listItems = [];
+
+    for (const item of items) {
+        // Handle different item types
+        if (typeof item === 'string') {
+            // Legacy string items (backward compatibility)
+            if (currentList !== 'ul') {
+                if (currentList) {
+                    html += closeCurrentList(currentList, listItems);
+                }
+                currentList = 'ul';
+                listItems = [];
+            }
+            listItems.push(`<li>${item}</li>`);
+        } else if (item.type === 'listitem') {
+            if (currentList !== 'ul') {
+                if (currentList) {
+                    html += closeCurrentList(currentList, listItems);
+                }
+                currentList = 'ul';
+                listItems = [];
+            }
+            const indentClass = item.indent > 0 ? ` class="indent-${Math.min(item.indent, 3)}"` : '';
+            listItems.push(`<li${indentClass}>${item.content}</li>`);
+        } else {
+            // Close any open list before rendering other elements
+            if (currentList) {
+                html += closeCurrentList(currentList, listItems);
+                currentList = null;
+                listItems = [];
+            }
+
+            switch (item.type) {
+                case 'paragraph':
+                    html += `<p class="changelog-paragraph">${item.content}</p>`;
+                    break;
+                case 'blockquote':
+                    html += `<blockquote class="changelog-blockquote">${item.content}</blockquote>`;
+                    break;
+                case 'codeblock':
+                    const languageClass = item.language ? ` class="language-${item.language}"` : '';
+                    html += `<pre class="changelog-codeblock"><code${languageClass}>${escapeHtml(item.content)}</code></pre>`;
+                    break;
+            }
+        }
+    }
+
+    // Close any remaining open list
+    if (currentList) {
+        html += closeCurrentList(currentList, listItems);
+    }
+
+    return html;
+}
+
+// Helper function to close current list
+function closeCurrentList(listType, items) {
+    if (listType === 'ul') {
+        return `<ul class="changelog-list">${items.join('')}</ul>`;
+    }
+    return '';
+}
+
+// Escape HTML for code blocks
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Display changelog error

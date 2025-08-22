@@ -831,6 +831,129 @@ section {
     font-weight: bold;
 }
 
+/* Enhanced Markdown Support in Changelog */
+.changelog-list li.indent-1 {
+    padding-left: calc(var(--space-lg) + var(--space-lg));
+}
+
+.changelog-list li.indent-2 {
+    padding-left: calc(var(--space-lg) + var(--space-xl));
+}
+
+.changelog-list li.indent-3 {
+    padding-left: calc(var(--space-lg) + var(--space-2xl));
+}
+
+.changelog-paragraph {
+    margin: var(--space-md) 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.875rem;
+}
+
+.changelog-blockquote {
+    margin: var(--space-md) 0;
+    padding: var(--space-md) var(--space-lg);
+    border-left: 4px solid var(--accent-color);
+    background: rgba(var(--accent-color-rgb), 0.05);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.changelog-codeblock {
+    margin: var(--space-md) 0;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.changelog-codeblock code {
+    display: block;
+    padding: var(--space-md);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #e6e6e6;
+    background: transparent;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* Inline markdown styles */
+.changelog-list li strong,
+.changelog-paragraph strong,
+.changelog-blockquote strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.changelog-list li em,
+.changelog-paragraph em,
+.changelog-blockquote em {
+    font-style: italic;
+    color: var(--text-primary);
+}
+
+.changelog-list li code,
+.changelog-paragraph code,
+.changelog-blockquote code {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 0.8em;
+    background: rgba(var(--accent-color-rgb), 0.1);
+    color: var(--accent-color);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+}
+
+.changelog-list li del,
+.changelog-paragraph del,
+.changelog-blockquote del {
+    text-decoration: line-through;
+    color: var(--text-tertiary);
+    opacity: 0.7;
+}
+
+.changelog-list li a,
+.changelog-paragraph a,
+.changelog-blockquote a {
+    color: var(--accent-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.changelog-list li a:hover,
+.changelog-paragraph a:hover,
+.changelog-blockquote a:hover {
+    border-bottom-color: var(--accent-color);
+}
+
+/* Syntax highlighting for code blocks */
+.changelog-codeblock .language-javascript code,
+.changelog-codeblock .language-js code {
+    color: #f7df1e;
+}
+
+.changelog-codeblock .language-css code {
+    color: #1572b6;
+}
+
+.changelog-codeblock .language-html code {
+    color: #e34f26;
+}
+
+.changelog-codeblock .language-bash code,
+.changelog-codeblock .language-sh code {
+    color: #89e051;
+}
+
+.changelog-codeblock .language-json code {
+    color: #4db8ff;
+}
+
 /* Footer */
 .footer {
     background: var(--bg-dark);
