@@ -258,8 +258,8 @@ jobs:
         - Each playback will have a slightly higher pitch
         - Check X-Plane's Log.txt for plugin status messages
         
-        Build: \$(date '+%Y-%m-%d %H:%M:%S') UTC
-        Commit: \${{ github.sha }}
+        Build: $(date '+%Y-%m-%d %H:%M:%S') UTC
+        Commit: ${{ github.sha }}
         EOF
         
         cd release

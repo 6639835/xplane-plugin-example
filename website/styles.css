@@ -193,7 +193,7 @@ code {
 .hero {
     padding: 120px 0 var(--space-3xl);
     background: linear-gradient(135deg, rgba(55, 53, 47, 0.8) 0%, rgba(120, 119, 116, 0.6) 100%), 
-                url('https://file.notion.so/f/f/52bb5822-3ade-43a9-88e7-446725f417c2/0545e6be-10a3-4c39-b238-1b511965525e/X-Plane_Screenshot_2024.10.25_-_16.00.47.83.png?table=block&id=2566b423-f47b-803a-9a4b-caaffa53fbcc&spaceId=52bb5822-3ade-43a9-88e7-446725f417c2&expirationTimestamp=1755770400000&signature=SMVSLVfBiMHkAi-oelA6div96XhfDAyXxuL2yuTvqGc&downloadName=X-Plane_Screenshot_2024.10.25_-_16.00.47.83.png') center/cover no-repeat fixed;
+                url('https://d2wlxnjs36siot.cloudfront.net/X-Plane_Screenshot_2024.10.25_-_16.00.47.83.png') center/cover no-repeat fixed;
     min-height: 100vh;
     display: flex;
     align-items: center;

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.6] - 2025-08-24
+
+### Fixed
+- **Release Documentation**: Fixed UTC time display in release README files - removed escaped backslashes that prevented date command execution
+- **GitHub Actions**: Corrected shell variable escaping in build workflow to properly display build timestamps
+- **Release Artifacts**: Build time and commit SHA now display correctly in release packages instead of showing raw command text
+
+### Technical Improvements
+- Enhanced GitHub Actions workflow with proper variable substitution
+- Improved release package metadata generation
+- Fixed shell command execution in automated release process
+
 ## [1.0.5] - 2025-08-21
 
 ### Added
@@ -146,7 +158,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plugin usage guidelines
 - Installation and deployment instructions
 
-[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.5...HEAD
+[Unreleased]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.6...HEAD
+[1.0.6]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/6639835/xplane-plugin-example/compare/v1.0.2...v1.0.3
